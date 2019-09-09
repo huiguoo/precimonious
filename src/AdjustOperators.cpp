@@ -41,14 +41,14 @@ void AdjustOperators::doInitialization(Module &module) {
 
 
 bool AdjustOperators::runOnModule(Module &module) {
-  errs() << "Running AdjustOperators\n";
+  //errs() << "Running AdjustOperators\n";
   doInitialization(module);
 
   // iterate through operator set
   for(Module::iterator f = module.begin(), fe = module.end(); f != fe; f++) {
     runOnFunction(*f);
   }
-  errs() << "Done!\n";
+  //errs() << "Done!\n";
   return true;
 }
 
@@ -57,7 +57,7 @@ bool AdjustOperators::runOnFunction(Function &function) {
   string name = function.getName();
   
   if (! function.isDeclaration()  && (includedFunctions.find(name) != includedFunctions.end()) && (excludedFunctions.find(name) == excludedFunctions.end())) {
-    errs() << "=== Exploring function: " << function.getName() << "\n";
+    //errs() << "=== Exploring function: " << function.getName() << "\n";
     for(Function::iterator b = function.begin(), be = function.end(); b != be; b++) {
       for(BasicBlock::iterator i = b->begin(), ie = b->end(); i != ie; i++) {
 	if (BinaryOperator* binOp = dyn_cast<BinaryOperator>(i)) {

@@ -16,7 +16,7 @@ fi
 
 varFlags="--only-arrays --only-scalars --funs"
 
-echo "Creating search file search file" search_$1.json
+echo "** Creating search file" search_$1.json
 opt -load $sharedLib -search-file --original-type $varFlags $1.bc --filename search_$1.json > $1.tmp
 
 # cleaning up

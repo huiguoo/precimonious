@@ -13,7 +13,7 @@ def main():
     bitcodefile = sys.argv[1]
     configfile = sys.argv[2]
     result = transform2.transform(bitcodefile, configfile)
-    print "Return value: " + str(result)
+    #print "Return value: " + str(result)
     
 if __name__ == "__main__":
     main()

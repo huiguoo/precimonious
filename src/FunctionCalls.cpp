@@ -28,7 +28,7 @@ void FunctionCalls::doInitialization(Module &module) {
 
 
 bool FunctionCalls::runOnModule(Module &module) {
-  errs() << "Replacing function calls\n";
+  errs() << "** Replacing function calls\n";
   doInitialization(module);
 
   vector<Change*>::iterator it;
@@ -49,9 +49,10 @@ CallInst* FunctionCalls::changeFunctionCall(Module &module, Change* change) {
   // TODO: use the types vector to not assume signature
   Function *newCallee = module.getFunction(newFunction);
   if (newCallee) {
-    errs() << "Changing function call from " << oldFunction << " to " << newFunction << "\n";
+    //errs() << "Changing function call from " << oldFunction << " to " << newFunction << "\n";
     
     if (oldFunction != newFunction) {
+      errs() << "\tFunction call: " << oldFunction << " -> " << newFunction << "\n";
       // retrieving original operand
       Value *oldOperand = oldCallInst->getOperand(0);
       
@@ -77,10 +78,10 @@ CallInst* FunctionCalls::changeFunctionCall(Module &module, Change* change) {
       // deleting old callInst
       oldCallInst->eraseFromParent();
       
-      errs() << "\tChange was successful\n";
+      //errs() << "\tChange was successful\n";
     }
     else {
-      errs() << "\tNo change required\n";
+      //errs() << "\tNo change required\n";
     }
   }
   else {

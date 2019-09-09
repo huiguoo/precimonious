@@ -20,6 +20,7 @@ search_counter = 0
 def run_config(search_config, original_config, bitcode):
   global search_counter
   utilities.print_config(search_config, "config_temp.json")
+  print "** Exploring configuration #" + str(search_counter)
   result = transform2.transform(bitcode, "config_temp.json")
   if result == 1:
     utilities.print_config(search_config, "VALID_config_" + bitcode + "_" + str(search_counter) + ".json")
@@ -264,12 +265,12 @@ def main():
     else:
       switch_set.append([])
 
-  print switch_set
+  #print switch_set
 
   #
   # search for valid configuration
   #
-  print "Searching for valid configuration using delta-debugging algorithm ..."
+  print "** Searching for valid configuration using delta-debugging algorithm"
 
   # get original score
   to_highest_precision(change_set, type_set, switch_set)
@@ -285,7 +286,7 @@ def main():
   modified_score = utilities.get_dynamic_score()
 
   if modified_score <= original_score:
-    print "Check valid_" + bitcode + ".json for the valid configuration file"
+    print "Check dd2_valid_" + bitcode + ".json for the valid configuration file"
     # print valid configuration file and diff file
     utilities.print_config(search_conf, "dd2_valid_" + bitcode + ".json")
     utilities.print_diff(search_conf, original_conf, "dd2_diff_" + bitcode + ".json")

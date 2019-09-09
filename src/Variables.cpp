@@ -126,9 +126,10 @@ void Variables::changeGlobal(Change* change, Module &module) {
   GlobalValue* oldTarget = dyn_cast<GlobalValue>(change->getValue());
   Type* oldType = oldTarget->getType()->getElementType();
   Type* newType = change->getType()[0];
-  errs() << "Changing the precision of variable \"" << oldTarget->getName() << "\" from " << *oldType << " to " << *newType << ".\n";
+  //errs() << "Changing the precision of variable \"" << oldTarget->getName() << "\" from " << *oldType << " to " << *newType << ".\n";
 
   if (diffTypes(oldType, newType)) {      
+    errs() << "\tVariable " << oldTarget->getName() << ": " << *oldType << " -> " << *newType << "\n";
     Constant *initializer;
     GlobalVariable* newTarget;
 
@@ -168,9 +169,9 @@ void Variables::changeGlobal(Change* change, Module &module) {
     }	  
     //oldTarget->eraseFromParent();
   }
-  else {
+  /*else {
     errs() << "No changes required.\n";
-  }
+    }*/
   return;
 }
 
@@ -196,10 +197,11 @@ AllocaInst* Variables::changeLocal(Value* value, Type* newType) {
   if (AllocaInst *oldTarget = dyn_cast<AllocaInst>(value)) {
     Type* oldType = oldTarget->getType()->getElementType();
 
-    errs() << "Changing the precision of variable \"" << oldTarget->getName() << "\" from " << *oldType 
-	   << " to " << *newType << ".\n";
+    //errs() << "Changing the precision of variable \"" << oldTarget->getName() << "\" from " << *oldType 
+    //	   << " to " << *newType << ".\n";
 
     if (diffTypes(oldType, newType)) {      
+      errs() << "\tVariable " << oldTarget->getName() << ": " << *oldType << " -> " << *newType << "\n";
       unsigned alignment = getAlignment(newType);
 
       newTarget = new AllocaInst(newType, 0, alignment, "new", oldTarget);
@@ -221,9 +223,9 @@ AllocaInst* Variables::changeLocal(Value* value, Type* newType) {
       // erase old instruction
       //oldTarget->eraseFromParent();      
     }
-    else {
+    /*else {
       errs() << "\tNo changes required.\n";
-    }
+      }*/
   }
   else if (Argument *argument = dyn_cast<Argument>(value)){
     errs() << "WARNING: Function argument instead of Alloca for: " << argument->getName() << ".\n";
@@ -561,8 +563,8 @@ void Variables::updateMetadata(Module& module, Value* oldTarget, Value* newTarge
 
   vector<Instruction*> to_remove;
   if (newTarget) {
-    errs() << "\tChanging metadata for: " << newTarget->getName() << "\n";
-    bool changed = false;
+    //errs() << "\tChanging metadata for: " << newTarget->getName() << "\n";
+    //bool changed = false;
 
     for(Module::iterator f = module.begin(), fe = module.end(); f != fe; f++) {
       for(Function::iterator b = f->begin(), be = f->end(); b != be; b++) {
@@ -600,7 +602,7 @@ void Variables::updateMetadata(Module& module, Value* oldTarget, Value* newTarge
 		    newDeclare->setMetadata(id, oldDeclare->getMetadata(id));
 		  }
 		  to_remove.push_back(oldDeclare); // can't erase while iterating through instructions
-		  changed = true;
+		  //changed = true;
 		}
 	      }
 	    }
@@ -611,16 +613,16 @@ void Variables::updateMetadata(Module& module, Value* oldTarget, Value* newTarge
     for(unsigned i = 0; i < to_remove.size(); i++) {
       to_remove[i]->eraseFromParent();
     }
-    if (!changed) {
+    /*if (!changed) {
       errs() << "\tNo metadata to change\n";
-    }
+      }*/
   }
   return;
 }
 
 
 bool Variables::runOnModule(Module &module) {
-  errs() << "Running Variables\n";
+  errs() << "** Changing precision of variables\n";
   doInitialization(module);
 
   vector<Change*>::iterator it;
@@ -632,7 +634,7 @@ bool Variables::runOnModule(Module &module) {
   for(it = changes[LOCALVAR].begin(); it != changes[LOCALVAR].end(); it++) {
     AllocaInst* newTarget = changeLocal(*it);
     if (newTarget) {
-      errs() << "\tProcessed local variable: " << newTarget->getName() << "\n";
+      //errs() << "\tProcessed local variable: " << newTarget->getName() << "\n";
       updateMetadata(module, (*it)->getValue(), newTarget, (*it)->getType()[0]);
 
 #ifdef DEBUG

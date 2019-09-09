@@ -111,6 +111,7 @@ bool ParseConfig::runOnModule(Module &M) {
   /**
    * Printing INFO message.
    */
+  /*
   for (map<ChangeType, Changes>::iterator im = changes.begin(); im != changes.end(); im++) {
     ChangeType changeType = im->first;
     Changes changeVector = im->second;
@@ -133,6 +134,7 @@ bool ParseConfig::runOnModule(Module &M) {
       errs() << "\n";
     }
   }
+  */
 
   return false;
 }

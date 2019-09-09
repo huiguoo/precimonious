@@ -318,7 +318,7 @@ bool CreateSearchFile::doInitialization(Module &) {
 
   // populating function calls
   functionCalls.insert("log");
-  //functionCalls.insert("sqrt");
+  functionCalls.insert("sqrt");
   functionCalls.insert("cos"); //FT
   functionCalls.insert("sin"); //FT
   functionCalls.insert("acos"); //funarc

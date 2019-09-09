@@ -251,19 +251,19 @@ bool CreateConfigFile::doInitialization(Module &) {
   inFile.close();
 
 
-  if (PythonFormat) {
+  /*if (PythonFormat) {
     errs() << "Using python format\n";
   }
   else {
     errs() << "NOT using python format\n";
-  }
+    }*/
   
   // populating function calls
   functionCalls.insert("log");
-  //functionCalls.insert("sqrt");
-  functionCalls.insert("cos"); //FT
-  functionCalls.insert("sin"); //FT
-  functionCalls.insert("acos"); //funarc
+  functionCalls.insert("sqrt");
+  functionCalls.insert("cos");
+  functionCalls.insert("sin");
+  functionCalls.insert("acos");
 
   return false;
 }

@@ -19,7 +19,7 @@ fi
 
 varFlags="--only-arrays --only-scalars --funs"
 
-echo "Creating type configuration file" config_$1.json
+echo "** Creating type configuration file" config_$1.json
 opt -load $sharedLib -config-file $varFlags --pformat $1.bc --filename config_$1.json > $1.tmp
 
 # cleaning up
